@@ -2,10 +2,14 @@ package com.loma.technology.currencyservice.service.impl;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.loma.technology.currencyservice.dto.CurrencyDTO;
+import com.loma.technology.currencyservice.dto.CurrencySearchCriteria;
 import com.loma.technology.currencyservice.entity.Currency;
 import com.loma.technology.currencyservice.exception.CurrencyNotFoundException;
 import com.loma.technology.currencyservice.mapper.CurrencyMapper;
@@ -61,6 +65,21 @@ public class CurrencyServiceImpl implements CurrencyService{
 				.stream()
 				.map(currencyMapper::toCurrencyDTO)
 				.toList();
+	}
+
+	@Override
+	public Page<CurrencyDTO> search(CurrencySearchCriteria searchCriteria, Pageable pageable) {
+		int offset = (int) pageable.getOffset();
+		int limit = pageable.getPageSize();
+		
+		List<Currency> currencies = currencyRepository.search(searchCriteria, offset, limit);
+		long count = currencyRepository.count(searchCriteria);
+		
+		List<CurrencyDTO> dtoList = currencies.stream()
+			.map(currencyMapper::toCurrencyDTO)
+			.toList();
+		
+		return new PageImpl<>(dtoList, pageable, count);
 	}
 
 }

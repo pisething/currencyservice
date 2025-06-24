@@ -7,10 +7,14 @@ import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Options;
+import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.SelectProvider;
 import org.apache.ibatis.annotations.Update;
 
+import com.loma.technology.currencyservice.dto.CurrencySearchCriteria;
 import com.loma.technology.currencyservice.entity.Currency;
+import com.loma.technology.currencyservice.provider.CurrencyQueryProvider;
 
 @Mapper
 public interface CurrencyRepository {
@@ -30,4 +34,12 @@ public interface CurrencyRepository {
 
     @Delete("DELETE FROM currencies WHERE id = #{id}")
     void deleteById(Long id);
+    
+    @SelectProvider(type = CurrencyQueryProvider.class, method = "buildSearchQuery")
+    List<Currency> search( @Param("criteria") CurrencySearchCriteria criteria, @Param("offset") int offset, @Param("limit") int limit);
+    
+    @SelectProvider(type = CurrencyQueryProvider.class, method = "buildCountQuery")
+    long count( @Param("criteria") CurrencySearchCriteria criteria);
+    
+    
 }
