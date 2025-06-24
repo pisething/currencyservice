@@ -5,6 +5,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.loma.technology.currencyservice.dto.CurrencyDTO;
 import com.loma.technology.currencyservice.entity.Currency;
+import com.loma.technology.currencyservice.exception.CurrencyNotFoundException;
 import com.loma.technology.currencyservice.mapper.CurrencyMapper;
 import com.loma.technology.currencyservice.repository.CurrencyRepository;
 import com.loma.technology.currencyservice.service.CurrencyService;
@@ -32,7 +33,7 @@ public class CurrencyServiceImpl implements CurrencyService{
 		currencyRepository.findById(id)
 		.ifPresentOrElse(existing -> {
 			currencyRepository.deleteById(id);
-		}, () -> {throw new RuntimeException("Not found");});
+		}, () -> {throw new CurrencyNotFoundException(id);});
 		
 	}
 
@@ -42,7 +43,14 @@ public class CurrencyServiceImpl implements CurrencyService{
 			.ifPresentOrElse(existing -> {
 				currencyMapper.update(currencyDTO, existing);
 				currencyRepository.update(existing);
-			}, () -> {throw new RuntimeException("Not found");});
+			}, () -> {throw new CurrencyNotFoundException(id);});
+	}
+
+	@Override
+	public CurrencyDTO findById(Long id) {
+		return currencyRepository.findById(id)
+				.map(currencyMapper::toCurrencyDTO)
+				.orElseThrow(() -> new CurrencyNotFoundException(id));
 	}
 
 }

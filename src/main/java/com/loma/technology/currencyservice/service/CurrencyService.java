@@ -9,4 +9,6 @@ public interface CurrencyService {
 	void deleteById(Long id);
 	
 	void update(Long id, CurrencyDTO currencyDTO);
+	
+	CurrencyDTO findById(Long id);
 }
