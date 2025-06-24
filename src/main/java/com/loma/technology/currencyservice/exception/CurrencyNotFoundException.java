@@ -1,5 +1,9 @@
 package com.loma.technology.currencyservice.exception;
 
+import com.loma.technology.currencyservice.exception.base.BaseException;
+import com.loma.technology.currencyservice.exception.base.ErrorCode;
+import com.loma.technology.currencyservice.exception.base.ErrorMessage;
+
 import lombok.Getter;
 
 @Getter

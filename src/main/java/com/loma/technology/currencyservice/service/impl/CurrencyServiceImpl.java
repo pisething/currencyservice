@@ -1,5 +1,7 @@
 package com.loma.technology.currencyservice.service.impl;
 
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -47,10 +49,18 @@ public class CurrencyServiceImpl implements CurrencyService{
 	}
 
 	@Override
-	public CurrencyDTO findById(Long id) {
+	public CurrencyDTO getById(Long id) {
 		return currencyRepository.findById(id)
 				.map(currencyMapper::toCurrencyDTO)
 				.orElseThrow(() -> new CurrencyNotFoundException(id));
+	}
+
+	@Override
+	public List<CurrencyDTO> getAll() {
+		return currencyRepository.findAll()
+				.stream()
+				.map(currencyMapper::toCurrencyDTO)
+				.toList();
 	}
 
 }

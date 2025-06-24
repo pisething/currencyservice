@@ -1,4 +1,4 @@
-package com.loma.technology.currencyservice.exception;
+package com.loma.technology.currencyservice.exception.base;
 
 import lombok.Data;
 

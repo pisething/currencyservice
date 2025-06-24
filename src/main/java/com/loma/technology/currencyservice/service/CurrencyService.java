@@ -1,5 +1,7 @@
 package com.loma.technology.currencyservice.service;
 
+import java.util.List;
+
 import com.loma.technology.currencyservice.dto.CurrencyDTO;
 
 public interface CurrencyService {
@@ -10,5 +12,7 @@ public interface CurrencyService {
 	
 	void update(Long id, CurrencyDTO currencyDTO);
 	
-	CurrencyDTO findById(Long id);
+	CurrencyDTO getById(Long id);
+	
+	List<CurrencyDTO> getAll();
 }

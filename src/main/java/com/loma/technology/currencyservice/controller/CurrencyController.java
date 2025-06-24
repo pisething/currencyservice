@@ -1,5 +1,7 @@
 package com.loma.technology.currencyservice.controller;
 
+import java.util.List;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -43,7 +45,12 @@ public class CurrencyController {
 	
 	@GetMapping("{id}")
 	public ResponseEntity<CurrencyDTO> findById(@PathVariable long id){
-		return ResponseEntity.ok(currencyService.findById(id));
+		return ResponseEntity.ok(currencyService.getById(id));
+	}
+	
+	@GetMapping
+	public ResponseEntity<List<CurrencyDTO>> findAll(){
+		return ResponseEntity.ok(currencyService.getAll());
 	}
 
 }
