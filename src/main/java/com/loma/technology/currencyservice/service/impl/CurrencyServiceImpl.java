@@ -2,6 +2,7 @@ package com.loma.technology.currencyservice.service.impl;
 
 import java.util.List;
 
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -44,6 +45,7 @@ public class CurrencyServiceImpl implements CurrencyService{
 	}
 
 	@Override
+	@Transactional
 	public void update(Long id, CurrencyDTO currencyDTO) {
 		currencyRepository.findById(id)
 			.ifPresentOrElse(existing -> {
@@ -53,6 +55,7 @@ public class CurrencyServiceImpl implements CurrencyService{
 	}
 
 	@Override
+	@Cacheable(value = "currencies", key = "#id")
 	public CurrencyDTO getById(Long id) {
 		return currencyRepository.findById(id)
 				.map(currencyMapper::toCurrencyDTO)
