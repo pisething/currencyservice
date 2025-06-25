@@ -37,13 +37,14 @@ A backend REST API built with Spring Boot for managing currencies. It supports f
 ### 📦 1. Clone and Navigate to Project
 
 ```bash
-git clone https://github.com/your-username/currencyservice.git
+git clone https://github.com/pisething/currencyservice.git
 cd currencyservice
 ```
 
 ### 🐳 2. Start All Services via Docker Compose
 
 ```bash
+mvn clean package
 docker compose up -d
 ```
 
@@ -156,4 +157,4 @@ exception/    -> Custom exceptions and global handler
 
 ## 👨‍💻 Author
 
-**Ing Piseth** – Senior Java Developer | Trainer
+**Ing Piseth** – Senior Java Developer
