@@ -10,19 +10,35 @@ import com.loma.technology.currencyservice.util.ProblemDetailFactory;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+/**
+ * Global exception handler to handle and format exceptions thrown across the application.
+ * It uses ProblemDetail (RFC 7807) for standardized error responses.
+ */
 @Slf4j
 @RequiredArgsConstructor
 @ControllerAdvice
 public class GlobalExceptionHandler {
-	
+	// Factory class used to construct standardized ProblemDetail objects
 	private final ProblemDetailFactory problemDetailFactory;
 
+	/**
+     * Handles CurrencyNotFoundException and returns a 404 NOT FOUND response.
+     *
+     * @param ex the exception thrown when a currency is not found
+     * @return a ProblemDetail describing the error
+     */
 	@ExceptionHandler(CurrencyNotFoundException.class)
 	public ProblemDetail handleCurrencyNotFound(CurrencyNotFoundException ex) {
 		log.warn("Currency not found: {}", ex.getMessage());
 		return problemDetailFactory.create(HttpStatus.NOT_FOUND, ex);
 	}
 	
+	/**
+     * Handles any unexpected exceptions and returns a 500 INTERNAL SERVER ERROR response.
+     *
+     * @param ex the exception thrown
+     * @return a generic ProblemDetail response for internal errors
+     */
 	@ExceptionHandler(Exception.class)
 	public ProblemDetail handleGenericException(Exception ex) {
 		log.error("Unhandled error: {}", ex.getMessage(), ex);

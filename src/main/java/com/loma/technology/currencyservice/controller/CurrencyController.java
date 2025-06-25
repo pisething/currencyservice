@@ -25,6 +25,9 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.RequiredArgsConstructor;
 
+/**
+ * REST controller for managing Currency resources.
+ */
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("api/currencies")
@@ -32,6 +35,12 @@ public class CurrencyController {
 	
 	private final CurrencyService currencyService;
 	
+	/**
+	 * Create a new currency entry.
+	 *
+	 * @param dto the currency data to insert
+	 * @return HTTP 201 CREATED
+	 */
 	@PostMapping
 	@Operation(summary = "Create a new Currency")
 	@ApiResponse(responseCode = "201", description = "Currency created")
@@ -40,6 +49,12 @@ public class CurrencyController {
 		return ResponseEntity.status(HttpStatus.CREATED).build();
 	}
 	
+	/**
+	 * Delete a currency by ID.
+	 *
+	 * @param id the ID of the currency to delete
+	 * @return HTTP 204 NO CONTENT
+	 */
 	@DeleteMapping("{id}")
 	@Operation(summary = "Delete a new Currency by ID")
 	@ApiResponse(responseCode = "204", description = "Currency deleted")
@@ -48,6 +63,13 @@ public class CurrencyController {
 		return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
 	}
 	
+	/**
+	 * Update a currency by ID.
+	 *
+	 * @param dto the updated currency data
+	 * @param id the ID of the currency to update
+	 * @return HTTP 204 NO CONTENT
+	 */
 	@PutMapping("{id}")
 	@Operation(summary = "Update an existing Currency by ID")
 	@ApiResponse(responseCode = "201", description = "Currency updated")
@@ -56,6 +78,12 @@ public class CurrencyController {
 		return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
 	}
 	
+	/**
+	 * Retrieve a currency by ID.
+	 *
+	 * @param id the ID of the currency
+	 * @return the currency data
+	 */
 	@GetMapping("{id}")
 	@Operation(summary = "Get a Currency by ID")
 	@ApiResponse(responseCode = "200", description = "Currency retrieved")
@@ -63,6 +91,11 @@ public class CurrencyController {
 		return ResponseEntity.ok(currencyService.getById(id));
 	}
 	
+	/**
+	 * Retrieve all currencies.
+	 *
+	 * @return list of all currencies
+	 */
 	@GetMapping
 	@Operation(summary = "Get all Currencies")
 	@ApiResponse(responseCode = "200", description = "List of currencies retrieved")
@@ -70,6 +103,15 @@ public class CurrencyController {
 		return ResponseEntity.ok(currencyService.getAll());
 	}
 	
+	/**
+	 * Search currencies with filtering and pagination.
+	 *
+	 * @param code optional currency code filter
+	 * @param status optional status filter
+	 * @param page page number (default 0)
+	 * @param size page size (default 10)
+	 * @return paginated list of currencies
+	 */
 	@GetMapping("search")
 	@Operation(summary = "Search currencies with filters and pagiantion")
 	@ApiResponse(responseCode = "200", description = "Currency created")

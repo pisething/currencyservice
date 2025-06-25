@@ -20,7 +20,10 @@ import com.loma.technology.currencyservice.service.CurrencyService;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-
+/**
+ * Service Implementation for managing currency data.
+ * Provide CRUD operations with transactional boundaries and caching.
+ */
 @Slf4j
 @RequiredArgsConstructor
 @Service
@@ -28,6 +31,10 @@ public class CurrencyServiceImpl implements CurrencyService{
 	private final CurrencyRepository currencyRepository;
 	private final CurrencyMapper currencyMapper;
 
+	/**
+	 * Insert a new currency into the database.
+	 * @param currencyDTO the data transfer object containing currency info
+	 */
 	@Override
 	@Transactional
 	public void insert(CurrencyDTO currencyDTO) {
@@ -37,6 +44,10 @@ public class CurrencyServiceImpl implements CurrencyService{
 		currencyRepository.insert(currency);
 	}
 
+	/**
+	 * Delete a currency by ID. Evicts cache if present.
+	 * @param id the ID of the currency to delete
+	 */
 	@Override
 	@CacheEvict(value = "currencies", key = "#id")
 	@Transactional
@@ -54,6 +65,12 @@ public class CurrencyServiceImpl implements CurrencyService{
 		
 	}
 
+	/**
+     * Update a currency by ID. Evicts cache if present.
+     * 
+     * @param id the ID of the currency to update
+     * @param currencyDTO new data to update the currency
+     */
 	@Override
 	@CacheEvict(value = "currencies", key = "#id")
 	@Transactional
@@ -72,6 +89,12 @@ public class CurrencyServiceImpl implements CurrencyService{
 			});
 	}
 
+	/**
+     * Get a currency by ID. Caches the result.
+     * 
+     * @param id the ID of the currency
+     * @return the CurrencyDTO
+     */
 	@Override
 	@Cacheable(value = "currencies", key = "#id")
 	public CurrencyDTO getById(Long id) {
@@ -84,6 +107,11 @@ public class CurrencyServiceImpl implements CurrencyService{
 				}); 
 	}
 
+	/**
+     * Retrieve all currencies.
+     * 
+     * @return list of all CurrencyDTOs
+     */
 	@Override
 	public List<CurrencyDTO> getAll() {
 		log.info("Fetching all currencies");
@@ -95,6 +123,13 @@ public class CurrencyServiceImpl implements CurrencyService{
 		return list;
 	}
 
+	/**
+     * Search currencies based on dynamic criteria and pagination.
+     * 
+     * @param searchCriteria filter criteria
+     * @param pageable pagination information
+     * @return paginated list of CurrencyDTOs
+     */
 	@Override
 	public Page<CurrencyDTO> search(CurrencySearchCriteria searchCriteria, Pageable pageable) {
 		log.info("Searching currencies with criteria: {}, page={}, size={}", searchCriteria, pageable.getPageNumber(), pageable.getPageSize());
