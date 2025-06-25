@@ -1,7 +1,10 @@
-DROP DATABASE IF EXISTS currency_db;
-CREATE DATABASE currency_db;
+DROP DATABASE IF EXISTS currencydb;
+CREATE DATABASE currencydb;
 
-USE currency_db;
+-- Grant all privileges to `user` on currencydb
+GRANT ALL PRIVILEGES ON currencydb.* TO 'user'@'%';
+
+USE currencydb;
 
 CREATE TABLE currencies (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
