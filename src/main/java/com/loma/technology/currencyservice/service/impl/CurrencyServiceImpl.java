@@ -2,6 +2,7 @@ package com.loma.technology.currencyservice.service.impl;
 
 import java.util.List;
 
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -37,6 +38,7 @@ public class CurrencyServiceImpl implements CurrencyService{
 	}
 
 	@Override
+	@CacheEvict(value = "currencies", key = "#id")
 	@Transactional
 	public void deleteById(Long id) {
 		log.info("Deleting currency with id={}", id);
@@ -53,6 +55,7 @@ public class CurrencyServiceImpl implements CurrencyService{
 	}
 
 	@Override
+	@CacheEvict(value = "currencies", key = "#id")
 	@Transactional
 	public void update(Long id, CurrencyDTO currencyDTO) {
 		log.info("Updating currency with id={}", id);
