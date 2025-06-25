@@ -1,10 +1,16 @@
 package com.loma.technology.currencyservice.util;
 
+import java.util.Map;
+import java.util.stream.Collectors;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
 import org.springframework.stereotype.Component;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 
 import com.loma.technology.currencyservice.exception.base.BaseException;
+import com.loma.technology.currencyservice.exception.base.ErrorCode;
+import com.loma.technology.currencyservice.exception.base.ErrorDetail;
 
 /**
  * Factory class to build standardized {@link ProblemDetail} objects 
@@ -26,6 +32,23 @@ public class ProblemDetailFactory {
 		problemDetail.setDetail(ex.getMessage());
 		problemDetail.setProperty("code", ex.getCode());
 		problemDetail.setProperty("message", ex.getErrorMessage());
+		return problemDetail;
+	}
+	
+	public ProblemDetail create(HttpStatus httpStatus, MethodArgumentNotValidException ex) {
+		ProblemDetail problemDetail = ProblemDetail.forStatus(httpStatus);
+		
+		
+		Map<String, String> mapDetail = ex.getBindingResult().getFieldErrors().stream()
+			.collect(Collectors.toMap(error -> error.getField(), error -> error.getDefaultMessage()));
+
+		ErrorDetail errorDetail = new ErrorDetail("Validation Error", mapDetail);
+				
+		problemDetail.setTitle(httpStatus.getReasonPhrase());
+		problemDetail.setDetail(ex.getMessage());
+		problemDetail.setProperty("code", ErrorCode.VALIDATION_FAIL.getValue());
+		problemDetail.setProperty("message", "Validation Error");
+		problemDetail.setProperty("error_detail", errorDetail);
 		return problemDetail;
 	}
 	

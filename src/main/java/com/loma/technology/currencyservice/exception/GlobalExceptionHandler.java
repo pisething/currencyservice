@@ -1,7 +1,5 @@
 package com.loma.technology.currencyservice.exception;
 
-import java.util.stream.Collectors;
-
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -45,12 +43,9 @@ public class GlobalExceptionHandler {
 	 */
 	@ExceptionHandler(MethodArgumentNotValidException.class)
 	public ProblemDetail handleValidationException(MethodArgumentNotValidException ex) {
-	    String detail = ex.getBindingResult().getFieldErrors().stream()
-	            .map(error -> error.getField() + ": " + error.getDefaultMessage())
-	            .collect(Collectors.joining(", "));
 	    
-	    log.warn("Validation failed: {}", detail);
-	    return problemDetailFactory.create(HttpStatus.BAD_REQUEST, "Validation Failed", detail);
+	    log.warn("Validation failed");
+	    return problemDetailFactory.create(HttpStatus.BAD_REQUEST, ex);
 	}
 	
 	/**

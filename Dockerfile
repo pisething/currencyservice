@@ -1,5 +1,5 @@
 # Use official OpenJDK image as base
-FROM eclipse-temurin:17-jdk-alpine
+FROM eclipse-temurin:17-jdk
 
 # Set environment variable to reduce image size
 ENV JAVA_OPTS="-XX:+UseContainerSupport"

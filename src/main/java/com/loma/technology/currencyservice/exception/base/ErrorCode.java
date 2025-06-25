@@ -5,7 +5,8 @@ import lombok.Getter;
 @Getter
 public enum ErrorCode {
 
-	CURRENCY_NOT_FOUND("40001");
+	CURRENCY_NOT_FOUND("40001"),
+	VALIDATION_FAIL("40002");
 	
 	private String value;
 	
