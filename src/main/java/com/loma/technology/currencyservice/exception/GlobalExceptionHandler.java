@@ -1,7 +1,10 @@
 package com.loma.technology.currencyservice.exception;
 
+import java.util.stream.Collectors;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
@@ -31,6 +34,23 @@ public class GlobalExceptionHandler {
 	public ProblemDetail handleCurrencyNotFound(CurrencyNotFoundException ex) {
 		log.warn("Currency not found: {}", ex.getMessage());
 		return problemDetailFactory.create(HttpStatus.NOT_FOUND, ex);
+	}
+	
+	/**
+	 * Handles validation exceptions thrown when a request body fails bean validation.
+	 * This method is triggered when @Valid fails in controller methods.
+	 *
+	 * @param ex the exception containing validation errors
+	 * @return a ProblemDetail object with HTTP 400 status and detailed validation messages
+	 */
+	@ExceptionHandler(MethodArgumentNotValidException.class)
+	public ProblemDetail handleValidationException(MethodArgumentNotValidException ex) {
+	    String detail = ex.getBindingResult().getFieldErrors().stream()
+	            .map(error -> error.getField() + ": " + error.getDefaultMessage())
+	            .collect(Collectors.joining(", "));
+	    
+	    log.warn("Validation failed: {}", detail);
+	    return problemDetailFactory.create(HttpStatus.BAD_REQUEST, "Validation Failed", detail);
 	}
 	
 	/**

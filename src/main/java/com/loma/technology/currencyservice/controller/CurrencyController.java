@@ -23,6 +23,7 @@ import com.loma.technology.currencyservice.service.CurrencyService;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 /**
@@ -44,7 +45,7 @@ public class CurrencyController {
 	@PostMapping
 	@Operation(summary = "Create a new Currency")
 	@ApiResponse(responseCode = "201", description = "Currency created")
-	public ResponseEntity<Void> createCurrency(@RequestBody CurrencyDTO dto){
+	public ResponseEntity<Void> createCurrency(@Valid @RequestBody CurrencyDTO dto){
 		currencyService.insert(dto);
 		return ResponseEntity.status(HttpStatus.CREATED).build();
 	}
@@ -73,7 +74,7 @@ public class CurrencyController {
 	@PutMapping("{id}")
 	@Operation(summary = "Update an existing Currency by ID")
 	@ApiResponse(responseCode = "201", description = "Currency updated")
-	public ResponseEntity<Void> updateCurrency(@RequestBody CurrencyDTO dto, @PathVariable long id){
+	public ResponseEntity<Void> updateCurrency(@Valid @RequestBody CurrencyDTO dto, @PathVariable long id){
 		currencyService.update(id,dto);
 		return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
 	}
