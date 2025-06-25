@@ -1,4 +1,6 @@
 spring:
+  application:
+    name: currency-service
   datasource:
     url: jdbc:mysql://${DB_HOST:localhost}:${DB_PORT:3307}/${DB_NAME:currencydb}
     username: ${DB_USER:user}
@@ -11,4 +13,7 @@ spring:
   data:
     redis:
       host: ${REDIS_HOST:localhost}
-      port: ${REDIS_PORT:6379}
+      port: ${REDIS_PORT:6379}			
+
+server:
+  port: 8080

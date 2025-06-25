@@ -2,7 +2,9 @@ package com.loma.technology.currencyservice.dto;
 
 import java.io.Serializable;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * Data Transfer Object (DTO) for transferring Currency data
@@ -12,6 +14,8 @@ import lombok.Data;
  * or storing in cache.
  */
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class CurrencyDTO implements Serializable{
 	private static final long serialVersionUID = 2750449976355815417L;
 	

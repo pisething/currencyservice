@@ -1,6 +1,8 @@
 package com.loma.technology.currencyservice.entity;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 /**
@@ -10,6 +12,8 @@ import lombok.ToString;
  */
 @ToString
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class Currency {
 	/**
      * Unique identifier for the currency (Primary Key).
