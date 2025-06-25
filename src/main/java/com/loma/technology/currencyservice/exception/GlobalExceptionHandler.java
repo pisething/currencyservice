@@ -19,6 +19,13 @@ public class GlobalExceptionHandler {
 
 	@ExceptionHandler(CurrencyNotFoundException.class)
 	public ProblemDetail handleCurrencyNotFound(CurrencyNotFoundException ex) {
+		log.warn("Currency not found: {}", ex.getMessage());
 		return problemDetailFactory.create(HttpStatus.NOT_FOUND, ex);
+	}
+	
+	@ExceptionHandler(Exception.class)
+	public ProblemDetail handleGenericException(Exception ex) {
+		log.error("Unhandled error: {}", ex.getMessage(), ex);
+		return problemDetailFactory.create(HttpStatus.INTERNAL_SERVER_ERROR, "Internal Server error", "An unexpected error occurred");
 	}
 }

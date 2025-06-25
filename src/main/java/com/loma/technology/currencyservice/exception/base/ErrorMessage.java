@@ -1,14 +1,12 @@
 package com.loma.technology.currencyservice.exception.base;
 
 import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.Getter;
 
-@Data
+@Getter
 @AllArgsConstructor
-@NoArgsConstructor
 public class ErrorMessage {
-	private String title;
-	private String description;
+	private final String title;
+	private final String description;
 
 }

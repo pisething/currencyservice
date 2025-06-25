@@ -1,8 +1,8 @@
 package com.loma.technology.currencyservice.exception.base;
 
-import lombok.Data;
+import lombok.Getter;
 
-@Data
+@Getter
 public class BaseException extends RuntimeException{
 	/**
 	 * 
@@ -13,4 +13,10 @@ public class BaseException extends RuntimeException{
 	 */
 	private String code;
 	private ErrorMessage errorMessage;
+	
+	protected BaseException(String code, ErrorMessage errorMessage) {
+		super(errorMessage.getDescription());
+		this.code = code;
+		this.errorMessage = errorMessage;
+	}
 }
