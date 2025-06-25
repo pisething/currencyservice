@@ -30,48 +30,71 @@ public class CurrencyServiceImpl implements CurrencyService{
 	@Override
 	@Transactional
 	public void insert(CurrencyDTO currencyDTO) {
+		log.info("Create a new currency: {}", currencyDTO.getCode());
 		Currency currency = currencyMapper.toCurrency(currencyDTO);
+		log.debug("Mapped currency entity: {}", currency);
 		currencyRepository.insert(currency);
 	}
 
 	@Override
 	@Transactional
 	public void deleteById(Long id) {
+		log.info("Deleting currency with id={}", id);
 		currencyRepository.findById(id)
 		.ifPresentOrElse(existing -> {
+			log.debug("Currency found for deletion: {}", existing);
 			currencyRepository.deleteById(id);
-		}, () -> {throw new CurrencyNotFoundException(id);});
+		}, 
+		() -> {
+			log.warn("Attemp to delete non-existent currency id={}", id);
+			throw new CurrencyNotFoundException(id);
+		});
 		
 	}
 
 	@Override
 	@Transactional
 	public void update(Long id, CurrencyDTO currencyDTO) {
+		log.info("Updating currency with id={}", id);
 		currencyRepository.findById(id)
 			.ifPresentOrElse(existing -> {
+				log.debug("Currency before update: {}", existing);
 				currencyMapper.update(currencyDTO, existing);
+				log.debug("Currency after update: {}", existing);
 				currencyRepository.update(existing);
-			}, () -> {throw new CurrencyNotFoundException(id);});
+			}, 
+			() -> {
+				log.warn("Attemp to update non-existent currency id={}", id);
+				throw new CurrencyNotFoundException(id);
+			});
 	}
 
 	@Override
 	@Cacheable(value = "currencies", key = "#id")
 	public CurrencyDTO getById(Long id) {
+		log.info("Fetching currency by id={}", id);
 		return currencyRepository.findById(id)
 				.map(currencyMapper::toCurrencyDTO)
-				.orElseThrow(() -> new CurrencyNotFoundException(id));
+				.orElseThrow(() -> {
+					log.warn("Currency not found with id={}", id);
+					throw new CurrencyNotFoundException(id);
+				}); 
 	}
 
 	@Override
 	public List<CurrencyDTO> getAll() {
-		return currencyRepository.findAll()
+		log.info("Fetching all currencies");
+		var list = currencyRepository.findAll()
 				.stream()
 				.map(currencyMapper::toCurrencyDTO)
 				.toList();
+		log.debug("Total currencies fetched: {}", list.size());
+		return list;
 	}
 
 	@Override
 	public Page<CurrencyDTO> search(CurrencySearchCriteria searchCriteria, Pageable pageable) {
+		log.info("Searching currencies with criteria: {}, page={}, size={}", searchCriteria, pageable.getPageNumber(), pageable.getPageSize());
 		int offset = (int) pageable.getOffset();
 		int limit = pageable.getPageSize();
 		
@@ -81,6 +104,8 @@ public class CurrencyServiceImpl implements CurrencyService{
 		List<CurrencyDTO> dtoList = currencies.stream()
 			.map(currencyMapper::toCurrencyDTO)
 			.toList();
+		
+		log.debug("Search returned {} items out of total={}", dtoList.size(), count);
 		
 		return new PageImpl<>(dtoList, pageable, count);
 	}

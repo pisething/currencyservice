@@ -19,8 +19,6 @@ public class GlobalExceptionHandler {
 
 	@ExceptionHandler(CurrencyNotFoundException.class)
 	public ProblemDetail handleCurrencyNotFound(CurrencyNotFoundException ex) {
-		log.warn("Currency not found : {}", ex.getMessage());
-		log.info(ex.getErrorMessage().getDescription());
 		return problemDetailFactory.create(HttpStatus.NOT_FOUND, ex);
 	}
 }
